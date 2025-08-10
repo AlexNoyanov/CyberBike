@@ -154,10 +154,24 @@
       let showFuelActive = false;
       let showGearActive = true;
 
+      // Array of different text messages for different scenarios
+      const textMessages = [
+        "ABSTENTION",
+        "GEAR DOWN",
+        "OVERRUN",
+        "OVERHEAT",
+        "CHOKE",
+      ];
+
       // Text message function for different scenarios
       function setTextMessage(message) {
         const textMode = document.getElementById("textMode");
         textMode.innerText = message;
+      }
+
+      function getRandomMessage() {
+        const randomIndex = Math.floor(Math.random() * textMessages.length);
+        return textMessages[randomIndex];
       }
 
       function toggleTextMode() {
@@ -246,6 +260,11 @@
           } else {
             changeGearColor("#00b7ff"); // Default blue
           }
+        }
+
+        // Randomly change text message
+        if (textModeActive) {
+          setTextMessage(getRandomMessage());
         }
       }, 1000);
 
