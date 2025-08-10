@@ -30,7 +30,7 @@
         color: black;
         padding: 4px 8px;
         border-radius: 4px;
-        margin-left: 5px;
+        margin-top: 10px;
       }
       .rpm-bars {
         display: flex;
@@ -53,6 +53,7 @@
       }
       .fuel {
         display: flex;
+        flex-direction: column;
         align-items: center;
       }
       .fuel-bar {
@@ -71,7 +72,32 @@
         font-weight: bold;
         color: #ff3b3b;
         text-align: center;
-        min-width: 300px;
+        animation: fadeBlink 3s infinite ease-in-out;
+      }
+
+      @keyframes fadeBlink {
+        0% {
+          opacity: 1;
+        }
+        25% {
+          opacity: 0.3;
+        }
+        50% {
+          opacity: 0.8;
+        }
+        75% {
+          opacity: 0.2;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+      .speed-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-width: 260px;
       }
 
       .hidden {
@@ -97,8 +123,8 @@
       <div class="text-mode hidden" id="textMode">ABSTENTION</div>
 
       <div class="fuel">
-        <span style="margin-right: 10px">FUEL</span>
         <div id="fuelBars"></div>
+        <span style="margin-top: 10px">FUEL</span>
       </div>
     </div>
 
@@ -120,8 +146,12 @@
         if (textModeActive) {
           rpmBlock.classList.add("hidden");
           textMode.classList.remove("hidden");
-        } else {
+        } else if (rpmBarActive) {
           rpmBlock.classList.remove("hidden");
+          textMode.classList.add("hidden");
+        } else {
+          // Neither mode is active, hide both
+          rpmBlock.classList.add("hidden");
           textMode.classList.add("hidden");
         }
       }
@@ -150,7 +180,8 @@
         for (let i = 0; i < 8; i++) {
           const bar = document.createElement("div");
           bar.className = "fuel-bar";
-          bar.style.opacity = i < level ? 1 : 0.2;
+          // Reverse the logic: fill from bottom (higher indices) to top (lower indices)
+          bar.style.opacity = i >= 8 - level ? 1 : 0.2;
           fuelBars.appendChild(bar);
         }
       }
