@@ -65,6 +65,18 @@
       .rpm {
         rotate: 180deg;
       }
+
+      .text-mode {
+        font-size: 60px;
+        font-weight: bold;
+        color: #ff3b3b;
+        text-align: center;
+        min-width: 300px;
+      }
+
+      .hidden {
+        display: none;
+      }
     </style>
     <link
       href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap"
@@ -78,9 +90,11 @@
         <span class="mph">MPH</span>
       </div>
 
-      <div class="rpm">
+      <div class="rpm" id="rpmBlock">
         <div class="rpm-bars" id="rpmBars"></div>
       </div>
+
+      <div class="text-mode hidden" id="textMode">ABSTENTION</div>
 
       <div class="fuel">
         <span style="margin-right: 10px">FUEL</span>
@@ -89,6 +103,29 @@
     </div>
 
     <script>
+      // Add mode control variables
+      let textModeActive = true;
+      let rpmBarActive = false;
+
+      function toggleTextMode() {
+        textModeActive = !textModeActive;
+        rpmBarActive = !textModeActive;
+        updateDisplay();
+      }
+
+      function updateDisplay() {
+        const rpmBlock = document.getElementById("rpmBlock");
+        const textMode = document.getElementById("textMode");
+
+        if (textModeActive) {
+          rpmBlock.classList.add("hidden");
+          textMode.classList.remove("hidden");
+        } else {
+          rpmBlock.classList.remove("hidden");
+          textMode.classList.add("hidden");
+        }
+      }
+
       function randomizeSpeed() {
         document.getElementById("speed").innerText = Math.floor(
           Math.random() * 100
@@ -126,6 +163,16 @@
 
       generateRPM();
       generateFuel();
+
+      // Initialize display
+      updateDisplay();
+
+      // Add keyboard shortcut to toggle modes (press 'T' key)
+      document.addEventListener("keydown", function (event) {
+        if (event.key.toLowerCase() === "t") {
+          toggleTextMode();
+        }
+      });
     </script>
   </body>
 </html>
