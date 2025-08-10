@@ -134,7 +134,7 @@
         <div class="rpm-bars" id="rpmBars"></div>
       </div>
 
-      <div class="text-mode hidden" id="textMode">ABSTENTION</div>
+      <div class="text-mode hidden" id="textMode"></div>
 
       <div class="fuel" id="fuelSection">
         <div id="fuelBars"></div>
@@ -153,6 +153,12 @@
       let rpmBarActive = false;
       let showFuelActive = false;
       let showGearActive = true;
+
+      // Text message function for different scenarios
+      function setTextMessage(message) {
+        const textMode = document.getElementById("textMode");
+        textMode.innerText = message;
+      }
 
       function toggleTextMode() {
         textModeActive = !textModeActive;
@@ -223,12 +229,23 @@
           Math.floor(Math.random() * 6) + 1;
       }
 
+      function changeGearColor(color) {
+        const gearNumber = document.getElementById("gearNumber");
+        gearNumber.style.color = color;
+      }
+
       setInterval(() => {
         randomizeSpeed();
         generateRPM();
         generateFuel();
         if (showGearActive && !showFuelActive) {
           randomizeGear();
+          // Randomly change gear color to red or default blue
+          if (Math.random() > 0.5) {
+            changeGearColor("#ff3b3b"); // Red
+          } else {
+            changeGearColor("#00b7ff"); // Default blue
+          }
         }
       }, 1000);
 
@@ -237,6 +254,9 @@
 
       // Initialize display
       updateDisplay();
+
+      // Initialize with default message
+      setTextMessage("ABSTENTION");
 
       // Add keyboard shortcut to toggle modes (press 'T' key)
       document.addEventListener("keydown", function (event) {
