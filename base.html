@@ -24,13 +24,13 @@
         font-size: 100px;
         font-weight: bold;
       }
-      .mph {
+      .label {
         font-size: 24px;
         background: #ff3b3b;
         color: black;
         padding: 4px 8px;
         border-radius: 4px;
-        margin-top: 10px;
+        margin-top: 5px;
       }
       .rpm-bars {
         display: flex;
@@ -110,6 +110,13 @@
       .hidden {
         display: none;
       }
+
+      .gear-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-width: 260px;
+      }
     </style>
     <link
       href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap"
@@ -120,7 +127,7 @@
     <div class="hud">
       <div class="speed-container">
         <span id="speed" class="speed">65</span>
-        <span class="mph">MPH</span>
+        <span class="label">MPH</span>
       </div>
 
       <div class="rpm" id="rpmBlock">
@@ -134,11 +141,9 @@
         <span style="margin-top: 10px">FUEL</span>
       </div>
 
-      <div class="gear hidden" id="gearSection">
+      <div class="gear-container" id="gearSection">
         <div id="gearNumber" class="gear">3</div>
-        <span style="margin-top: 5px; font-size: 24px; color: #ff3b3b"
-          >GEAR</span
-        >
+        <span class="label">GEAR</span>
       </div>
     </div>
 
