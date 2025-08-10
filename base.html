@@ -100,6 +100,13 @@
         min-width: 260px;
       }
 
+      .gear {
+        font-size: 100px;
+        font-weight: bold;
+        color: #ff3b3b;
+        text-align: center;
+      }
+
       .hidden {
         display: none;
       }
@@ -122,9 +129,16 @@
 
       <div class="text-mode hidden" id="textMode">ABSTENTION</div>
 
-      <div class="fuel">
+      <div class="fuel" id="fuelSection">
         <div id="fuelBars"></div>
         <span style="margin-top: 10px">FUEL</span>
+      </div>
+
+      <div class="gear hidden" id="gearSection">
+        <div id="gearNumber" class="gear">3</div>
+        <span style="margin-top: 5px; font-size: 24px; color: #ff3b3b"
+          >GEAR</span
+        >
       </div>
     </div>
 
@@ -132,6 +146,8 @@
       // Add mode control variables
       let textModeActive = true;
       let rpmBarActive = false;
+      let showFuelActive = false;
+      let showGearActive = true;
 
       function toggleTextMode() {
         textModeActive = !textModeActive;
@@ -142,6 +158,8 @@
       function updateDisplay() {
         const rpmBlock = document.getElementById("rpmBlock");
         const textMode = document.getElementById("textMode");
+        const fuelSection = document.getElementById("fuelSection");
+        const gearSection = document.getElementById("gearSection");
 
         if (textModeActive) {
           rpmBlock.classList.add("hidden");
@@ -153,6 +171,15 @@
           // Neither mode is active, hide both
           rpmBlock.classList.add("hidden");
           textMode.classList.add("hidden");
+        }
+
+        // Handle fuel vs gear display
+        if (showGearActive && !showFuelActive) {
+          fuelSection.classList.add("hidden");
+          gearSection.classList.remove("hidden");
+        } else {
+          fuelSection.classList.remove("hidden");
+          gearSection.classList.add("hidden");
         }
       }
 
@@ -186,10 +213,18 @@
         }
       }
 
+      function randomizeGear() {
+        document.getElementById("gearNumber").innerText =
+          Math.floor(Math.random() * 6) + 1;
+      }
+
       setInterval(() => {
         randomizeSpeed();
         generateRPM();
         generateFuel();
+        if (showGearActive && !showFuelActive) {
+          randomizeGear();
+        }
       }, 1000);
 
       generateRPM();
