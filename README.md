@@ -26,3 +26,8 @@ Plug-and-play solution where you can add any sensors to your bike like accelerom
 - Neutral
 
   Using this data the riding can be analysed and improved
+
+## Future AR-Glasses integration in XREAL
+Minimalistic UI to show critical information during the ride
+![ScreenRecording2025-08-11at00 09 54-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/d2a2f5b1-628f-42fe-99de-c61ff17480ab)
+
