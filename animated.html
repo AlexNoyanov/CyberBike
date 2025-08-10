@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modern HUD Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      background: black;
+      font-family: 'Orbitron', sans-serif;
+      color: #ff3c41;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .hud {
+      width: 90%;
+      max-width: 1200px;
+      border: 2px solid #ff3c41;
+      padding: 20px;
+      border-radius: 15px;
+      background: rgba(255, 60, 65, 0.05);
+      position: relative;
+      box-shadow: 0 0 15px rgba(255, 60, 65, 0.3);
+    }
+
+    .speed-container {
+      position: absolute;
+      left: 20px;
+      top: 20px;
+    }
+
+    .speed {
+      font-size: 72px;
+      position: relative;
+      height: 80px;
+      overflow: hidden;
+    }
+
+    .speed-digit {
+      display: inline-block;
+      min-width: 45px;
+      text-align: center;
+      transition: transform 0.3s ease-out;
+    }
+
+    .speed-label {
+      font-size: 18px;
+      color: white;
+      margin-top: 10px;
+    }
+
+    .fuel {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      text-align: right;
+    }
+
+    .fuel-bar {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 10px;
+    }
+
+    .fuel-bar div {
+      width: 20px;
+      height: 30px;
+      margin-left: 3px;
+      background-color: #ff3c41;
+      transition: background-color 0.3s ease;
+    }
+
+    .fuel-bar div:nth-child(5) {
+      background-color: #661517;
+    }
+
+    .fuel-bar div:nth-child(6) {
+      background-color: #441012;
+    }
+
+    .rpm-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 60px;
+    }
+
+    .rpm-bar {
+      display: flex;
+      height: 60px;
+      align-items: flex-end;
+    }
+
+    .rpm-segment {
+      width: 15px;
+      margin: 0 2px;
+      background-color: #441012;
+      transition: 
+        height 0.2s ease-out, 
+        background-color 0.2s ease;
+    }
+
+    .rpm-label {
+      margin-top: 10px;
+      color: white;
+    }
+
+    .glow {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 15px;
+      box-shadow: 
+        0 0 10px rgba(255, 60, 65, 0.5),
+        0 0 20px rgba(255, 60, 65, 0.3),
+        0 0 30px rgba(255, 60, 65, 0.1);
+      z-index: -1;
+      opacity: 0.7;
+      animation: pulse 2s infinite alternate;
+    }
+
+    @keyframes pulse {
+      from { opacity: 0.3; }
+      to { opacity: 0.7; }
+    }
+
+    .scanline {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(to bottom, 
+        rgba(255, 60, 65, 0) 0%, 
+        rgba(255, 60, 65, 0.8) 50%, 
+        rgba(255, 60, 65, 0) 100%);
+      box-shadow: 0 0 10px rgba(255, 60, 65, 0.8);
+      animation: scan 4s linear infinite;
+    }
+
+    @keyframes scan {
+      0% { top: 0; }
+      100% { top: 100%; }
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="hud">
+    <div class="glow"></div>
+    <div class="scanline"></div>
+    
+    <div class="speed-container">
+      <div class="speed">
+        <span class="speed-digit">0</span>
+      </div>
+      <div class="speed-label">MPH</div>
+    </div>
+
+    <div class="fuel">
+      <div>FUEL</div>
+      <div class="fuel-bar">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+
+    <div class="rpm-container">
+      <div class="rpm-bar">
+        <div class="rpm-segment"></div>
+        <div class="rpm-segment"></div>
+        <div class="rpm-segment"></div>
+        <div class="rpm-segment"></div>
+        <div class="rpm-segment"></div>
+        <div class="rpm-segment"></div>
+        <div class="rpm-segment"></div>
+        <div class="rpm-segment"></div>
+        <div class="rpm-segment"></div>
+        <div class="rpm-segment"></div>
+      </div>
+      <div class="rpm-label">RPM</div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Elements
+      const speedElement = document.querySelector('.speed-digit');
+      const rpmSegments = document.querySelectorAll('.rpm-segment');
+      const fuelBars = document.querySelectorAll('.fuel-bar div');
+      
+      // Speed animation
+      let currentSpeed = 0;
+      const targetSpeed = 85;
+      
+      function updateSpeed() {
+        if (currentSpeed < targetSpeed) {
+          currentSpeed += Math.floor(Math.random() * 4) + 1;
+          if (currentSpeed > targetSpeed) currentSpeed = targetSpeed;
+          
+          // Format with leading zero for single-digit numbers
+          speedElement.textContent = currentSpeed < 10 ? `0${currentSpeed}` : currentSpeed;
+          
+          // Add animation effect
+          speedElement.style.transform = 'translateY(-5px)';
+          setTimeout(() => {
+            speedElement.style.transform = 'translateY(0)';
+          }, 150);
+        }
+        
+        // Continue until target reached
+        if (currentSpeed < targetSpeed) {
+          setTimeout(updateSpeed, 150);
+        }
+      }
+      
+      // RPM animation
+      function animateRPM() {
+        // Reset all segments
+        rpmSegments.forEach(segment => {
+          segment.style.height = '0px';
+          segment.style.backgroundColor = '#441012';
+        });
+        
+        // Determine how many segments to activate (random between 4-10)
+        const activeSegments = Math.floor(Math.random() * 7) + 4;
+        
+        // Activate segments with staggered animation
+        for (let i = 0; i < activeSegments; i++) {
+          setTimeout(() => {
+            rpmSegments[i].style.height = `${Math.floor(Math.random() * 20) + 40}px`;
+            rpmSegments[i].style.backgroundColor = '#ff3c41';
+          }, i * 80);
+        }
+      }
+      
+      // Fuel animation
+      function animateFuel() {
+        fuelBars.forEach((bar, index) => {
+          if (index < 4) {
+            // Full bars
+            bar.style.opacity = '1';
+          } else {
+            // Low fuel bars with pulsing effect
+            bar.style.opacity = '0.7';
+            setTimeout(() => {
+              bar.style.opacity = '0.4';
+            }, 1000);
+          }
+        });
+      }
+      
+      // Start animations
+      setTimeout(updateSpeed, 500);
+      setInterval(animateRPM, 1800);
+      setInterval(animateFuel, 2000);
+      
+      // Initial animations
+      animateRPM();
+      animateFuel();
+    });
+  </script>
+</body>
+</html>

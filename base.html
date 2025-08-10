@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Futuristic UI</title>
+    <style>
+      body {
+        background-color: black;
+        color: #00b7ff;
+        font-family: "Orbitron", sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      .hud {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 90%;
+      }
+      .speed {
+        font-size: 100px;
+        font-weight: bold;
+      }
+      .mph {
+        font-size: 24px;
+        background: #ff3b3b;
+        color: black;
+        padding: 4px 8px;
+        border-radius: 4px;
+        margin-left: 5px;
+      }
+      .rpm-bars {
+        display: flex;
+        gap: 5px;
+      }
+      .bar {
+        width: 10px;
+        height: 60px;
+        background: #ff3b3b;
+        animation: pulse 1s infinite ease-in-out;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 0.4;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+      .fuel {
+        display: flex;
+        align-items: center;
+      }
+      .fuel-bar {
+        width: 20px;
+        height: 40px;
+        margin: 0 2px;
+        background-color: #ff3b3b;
+      }
+
+      .rpm {
+        rotate: 180deg;
+      }
+    </style>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="hud">
+      <div class="speed-container">
+        <span id="speed" class="speed">65</span>
+        <span class="mph">MPH</span>
+      </div>
+
+      <div class="rpm">
+        <div class="rpm-bars" id="rpmBars"></div>
+      </div>
+
+      <div class="fuel">
+        <span style="margin-right: 10px">FUEL</span>
+        <div id="fuelBars"></div>
+      </div>
+    </div>
+
+    <script>
+      function randomizeSpeed() {
+        document.getElementById("speed").innerText = Math.floor(
+          Math.random() * 100
+        );
+      }
+
+      function generateRPM() {
+        const rpmBars = document.getElementById("rpmBars");
+        rpmBars.innerHTML = "";
+        for (let i = 0; i < 10; i++) {
+          const bar = document.createElement("div");
+          bar.className = "bar";
+          bar.style.height = 30 + Math.random() * 50 + "px";
+          rpmBars.appendChild(bar);
+        }
+      }
+
+      function generateFuel() {
+        const fuelBars = document.getElementById("fuelBars");
+        fuelBars.innerHTML = "";
+        const level = Math.floor(Math.random() * 8) + 1;
+        for (let i = 0; i < 8; i++) {
+          const bar = document.createElement("div");
+          bar.className = "fuel-bar";
+          bar.style.opacity = i < level ? 1 : 0.2;
+          fuelBars.appendChild(bar);
+        }
+      }
+
+      setInterval(() => {
+        randomizeSpeed();
+        generateRPM();
+        generateFuel();
+      }, 1000);
+
+      generateRPM();
+      generateFuel();
+    </script>
+  </body>
+</html>
