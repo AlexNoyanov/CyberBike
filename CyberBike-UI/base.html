@@ -153,7 +153,7 @@
     <script>
       // Add mode control variables
       let textModeActive = false;
-      let rpmBarActive = false;
+      let rpmBarActive = false; // Start with RPM bars active
       let showFuelActive = false;
       let showGearActive = true;
 
@@ -318,12 +318,14 @@
         if (showGearActive && !showFuelActive) {
           // Remove gear update from here - it should be separate
         }
+      }, 100); // Speed updates every 100ms
 
-        // Randomly change text message
+      // Separate interval for text message changes every 10 seconds
+      setInterval(() => {
         if (textModeActive) {
           setTextMessage(getRandomMessage());
         }
-      }, 100); // Speed updates every 100ms
+      }, 10000); // Text messages change every 10 seconds
 
       // Separate interval for gear changes every 5 seconds
       setInterval(() => {
@@ -344,10 +346,15 @@
       // Initialize with default message
       setTextMessage("ABSTENTION");
 
-      // Add keyboard shortcut to toggle modes (press 'T' key)
+      // Add keyboard shortcuts for mode control
       document.addEventListener("keydown", function (event) {
         if (event.key.toLowerCase() === "t") {
           toggleTextMode();
+        }
+        if (event.code === "Space") {
+          event.preventDefault(); // Prevent page scrolling
+          textModeActive = !textModeActive; // Toggle text mode
+          updateDisplay();
         }
       });
     </script>
