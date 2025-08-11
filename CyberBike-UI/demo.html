@@ -153,12 +153,12 @@
     <script>
       // Add mode control variables
       let textModeActive = false;
-      let rpmBarActive = false; // Start with RPM bars active
+      let rpmBarActive = true; // Start with RPM bars active
       let showFuelActive = false;
       let showGearActive = true;
 
       // flags
-      let isSpeedSelected = true;
+      let isSpeedSelected = false;
       let isGearSelected = false;
 
       // Array of different text messages for different scenarios
@@ -250,7 +250,7 @@
       function generateRPM() {
         const rpmBars = document.getElementById("rpmBars");
         rpmBars.innerHTML = "";
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 50; i++) {
           const bar = document.createElement("div");
           bar.className = "bar";
           bar.style.height = 30 + Math.random() * 50 + "px";
