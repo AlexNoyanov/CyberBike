@@ -11,6 +11,7 @@ Speedometer -> CyberBike Module -> Bike wire conenctor
 ## How it works 
 Based on ESP32 Module inside it will give cool cyberpunk UI showing bike analytics
 Also storing the data from bike sensors and everything else
+
 <img width="526" height="284" alt="Screenshot 2025-08-11 at 00 08 00" src="https://github.com/user-attachments/assets/b0ac2f73-b995-42d7-baed-81ecdbac344d" />
 
 
@@ -25,3 +26,8 @@ Plug-and-play solution where you can add any sensors to your bike like accelerom
 - Neutral
 
   Using this data the riding can be analysed and improved
+
+## Future AR-Glasses integration in XREAL
+Minimalistic UI to show critical information during the ride
+![ScreenRecording2025-08-11at00 09 54-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/d2a2f5b1-628f-42fe-99de-c61ff17480ab)
+
