@@ -152,10 +152,14 @@
 
     <script>
       // Add mode control variables
-      let textModeActive = true;
+      let textModeActive = false;
       let rpmBarActive = false;
       let showFuelActive = false;
       let showGearActive = true;
+
+      // flags
+      let isSpeedSelected = true;
+      let isGearSelected = false;
 
       // Array of different text messages for different scenarios
       const textMessages = [
@@ -248,18 +252,28 @@
       }
 
       function randomizeGear() {
-        document.getElementById("gearNumber").innerText =
-          Math.floor(Math.random() * 6) + 1;
+        const gearValues = [1, 2, 3, 4, 5, 6, "N"];
+        const randomGear =
+          gearValues[Math.floor(Math.random() * gearValues.length)];
+        document.getElementById("gearNumber").innerText = randomGear;
+
+        // Apply special color for "N" gear
+        if (randomGear === "N") {
+          changeGearColor("#3bffd7");
+        } else {
+          // Randomly change gear color to red or default blue for numeric gears
+          if (Math.random() > 0.5) {
+            changeGearColor("#ff3b3b"); // Red
+          } else {
+            changeGearColor("#00b7ff"); // Default blue
+          }
+        }
       }
 
       function changeGearColor(color) {
         const gearNumber = document.getElementById("gearNumber");
         gearNumber.style.color = color;
       }
-
-      // flags
-      let isSpeedSelected = true;
-      let isGearSelected = false;
 
       function updateSelectionStyles() {
         const mphLabel = document.getElementById("mphLabel");
