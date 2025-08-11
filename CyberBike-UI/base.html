@@ -18,7 +18,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        width: 90%;
+        width: 100%;
       }
       .speed {
         font-size: 100px;
@@ -26,11 +26,14 @@
       }
       .label {
         font-size: 24px;
-        background: #ff3b3b;
+        background: #3bffd7;
         color: black;
         padding: 4px 8px;
         border-radius: 4px;
         margin-top: 5px;
+      }
+      .label-red {
+        background: #ff3b3b;
       }
       .rpm-bars {
         display: flex;
@@ -127,7 +130,7 @@
     <div class="hud">
       <div class="speed-container">
         <span id="speed" class="speed">65</span>
-        <span class="label">MPH</span>
+        <span id="mphLabel" class="label">MPH</span>
       </div>
 
       <div class="rpm" id="rpmBlock">
@@ -143,7 +146,7 @@
 
       <div class="gear-container" id="gearSection">
         <div id="gearNumber" class="gear">3</div>
-        <span class="label">GEAR</span>
+        <span id="gearLabel" class="">GEAR</span>
       </div>
     </div>
 
@@ -206,6 +209,12 @@
           fuelSection.classList.remove("hidden");
           gearSection.classList.add("hidden");
         }
+
+        // Update label styles based on active modes
+        const mphLabel = document.getElementById("mphLabel");
+        const gearLabel = document.getElementById("gearLabel");
+        if (mphLabel) mphLabel.classList.toggle("label", isSpeedSelected);
+        if (gearLabel) gearLabel.classList.toggle("label", isGearSelected);
       }
 
       function randomizeSpeed() {
@@ -248,6 +257,17 @@
         gearNumber.style.color = color;
       }
 
+      // flags
+      let isSpeedSelected = true;
+      let isGearSelected = false;
+
+      function updateSelectionStyles() {
+        const mphLabel = document.getElementById("mphLabel");
+        const gearLabel = document.getElementById("gearLabel");
+        if (mphLabel) mphLabel.classList.toggle("label", isSpeedSelected);
+        if (gearLabel) gearLabel.classList.toggle("label", isGearSelected);
+      }
+
       setInterval(() => {
         randomizeSpeed();
         generateRPM();
@@ -266,6 +286,9 @@
         if (textModeActive) {
           setTextMessage(getRandomMessage());
         }
+
+        // Update label styles on every display update
+        updateSelectionStyles();
       }, 1000);
 
       generateRPM();
