@@ -145,7 +145,7 @@
       </div>
 
       <div class="gear-container" id="gearSection">
-        <div id="gearNumber" class="gear">3</div>
+        <div id="gearNumber" class="gear">N</div>
         <span id="gearLabel" class="">GEAR</span>
       </div>
     </div>
@@ -221,11 +221,31 @@
         if (gearLabel) gearLabel.classList.toggle("label", isGearSelected);
       }
 
-      function randomizeSpeed() {
-        document.getElementById("speed").innerText = Math.floor(
-          Math.random() * 100
-        );
+      let currentSpeed = 0;
+      let speedIncreasing = true;
+      let speedIncrement = 1; // Speed increment per update
+
+      function updateSpeed() {
+        if (speedIncreasing) {
+          currentSpeed += speedIncrement;
+          if (currentSpeed >= 120) {
+            speedIncreasing = false;
+          }
+        } else {
+          currentSpeed -= speedIncrement;
+          if (currentSpeed <= 0) {
+            speedIncreasing = true;
+          }
+        }
+        document.getElementById("speed").innerText = currentSpeed;
       }
+
+      function setSpeedIncrement(increment) {
+        speedIncrement = increment;
+      }
+
+      // Example: Set boost mode (faster increment)
+      // setSpeedIncrement(5); // Increases by 5 every update
 
       function generateRPM() {
         const rpmBars = document.getElementById("rpmBars");
@@ -251,14 +271,16 @@
         }
       }
 
-      function randomizeGear() {
-        const gearValues = [1, 2, 3, 4, 5, 6, "N"];
-        const randomGear =
-          gearValues[Math.floor(Math.random() * gearValues.length)];
-        document.getElementById("gearNumber").innerText = randomGear;
+      let currentGear = 0; // Index for gear array
+      const gearValues = ["N", 1, 2, 3, 4, 5];
+
+      function updateGear() {
+        currentGear = (currentGear + 1) % gearValues.length;
+        const gearValue = gearValues[currentGear];
+        document.getElementById("gearNumber").innerText = gearValue;
 
         // Apply special color for "N" gear
-        if (randomGear === "N") {
+        if (gearValue === "N") {
           changeGearColor("#3bffd7");
         } else {
           // Randomly change gear color to red or default blue for numeric gears
@@ -268,6 +290,13 @@
             changeGearColor("#00b7ff"); // Default blue
           }
         }
+      }
+
+      // Initialize gear display with "N" and proper color
+      function initializeGear() {
+        const gearValue = gearValues[currentGear]; // This will be "N" since currentGear = 0
+        document.getElementById("gearNumber").innerText = gearValue;
+        changeGearColor("#3bffd7"); // Green color for neutral
       }
 
       function changeGearColor(color) {
@@ -283,33 +312,34 @@
       }
 
       setInterval(() => {
-        randomizeSpeed();
+        updateSpeed();
         generateRPM();
         generateFuel();
         if (showGearActive && !showFuelActive) {
-          randomizeGear();
-          // Randomly change gear color to red or default blue
-          if (Math.random() > 0.5) {
-            changeGearColor("#ff3b3b"); // Red
-          } else {
-            changeGearColor("#00b7ff"); // Default blue
-          }
+          // Remove gear update from here - it should be separate
         }
 
         // Randomly change text message
         if (textModeActive) {
           setTextMessage(getRandomMessage());
         }
+      }, 100); // Speed updates every 100ms
 
-        // Update label styles on every display update
-        updateSelectionStyles();
-      }, 1000);
+      // Separate interval for gear changes every 5 seconds
+      setInterval(() => {
+        if (showGearActive && !showFuelActive) {
+          updateGear();
+        }
+      }, 3000); // Gear changes every 5000ms (5 seconds)
 
       generateRPM();
       generateFuel();
 
       // Initialize display
       updateDisplay();
+
+      // Initialize gear display with "N"
+      initializeGear();
 
       // Initialize with default message
       setTextMessage("ABSTENTION");
