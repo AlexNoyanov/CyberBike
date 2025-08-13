@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CyberBike UI</title>
+    <style>
+      body {
+        background-color: black;
+        color: #00b7ff;
+        font-family: "Orbitron", sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      .hud {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+      }
+      .speed {
+        font-size: 100px;
+        font-weight: bold;
+      }
+      .label {
+        font-size: 24px;
+        background: #3bffd7;
+        color: black;
+        padding: 4px 8px;
+        border-radius: 4px;
+        margin-top: 5px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      .label:hover {
+        background: #00ffcc;
+        transform: scale(1.05);
+      }
+      .label:active {
+        transform: scale(0.95);
+      }
+
+      /* Styling for inactive labels */
+      span[id$="Label"]:not(.label) {
+        font-size: 24px;
+        color: #00b7ff;
+        margin-top: 5px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      span[id$="Label"]:not(.label):hover {
+        color: #00ccff;
+        transform: scale(1.05);
+      }
+      .label-red {
+        background: #ff3b3b;
+      }
+      .rpm-bars {
+        display: flex;
+        gap: 5px;
+      }
+      .bar {
+        width: 10px;
+        height: 60px;
+        background: #ff3b3b;
+        animation: pulse 1s infinite ease-in-out;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 0.4;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+      .fuel {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .fuel-bar {
+        width: 20px;
+        height: 40px;
+        margin: 0 2px;
+        background-color: #ff3b3b;
+      }
+
+      .rpm {
+        rotate: 180deg;
+      }
+
+      .text-mode {
+        font-size: 60px;
+        font-weight: bold;
+        color: #ff3b3b;
+        text-align: center;
+        animation: fadeBlink 3s infinite ease-in-out;
+      }
+
+      @keyframes fadeBlink {
+        0% {
+          opacity: 1;
+        }
+        25% {
+          opacity: 0.3;
+        }
+        50% {
+          opacity: 0.8;
+        }
+        75% {
+          opacity: 0.2;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+      .speed-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-width: 260px;
+      }
+
+      .gear {
+        font-size: 100px;
+        font-weight: bold;
+        color: #ff3b3b;
+        text-align: center;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .gear-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-width: 260px;
+      }
+
+      /* Default display for all blocks */
+      .speed-container {
+        display: flex;
+      }
+      .rpm {
+        display: block;
+      }
+      .text-mode {
+        display: block;
+      }
+      .fuel {
+        display: flex;
+      }
+      .gear-container {
+        display: flex;
+      }
+
+      /* Hidden state for blocks */
+      .hidden {
+        display: none !important;
+      }
+    </style>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- 
+    FLAGS TO CONTROL BLOCK VISIBILITY:
+    
+    Use these JavaScript variables to show/hide blocks:
+    
+    showSpeed = true/false    - Controls speed display
+    showRpm = true/false      - Controls RPM bars
+    showText = true/false     - Controls text mode
+    showFuel = true/false     - Controls fuel display
+    showGear = true/false     - Controls gear display
+    
+    All flags default to true (visible)
+    Change values in the script section below
+    -->
+
+    <div class="hud">
+      <div class="speed-container">
+        <span id="speed" class="speed">0</span>
+        <span id="mphLabel" class="label">MPH</span>
+      </div>
+
+      <div class="rpm" id="rpmBlock">
+        <div class="rpm-bars" id="rpmBars">
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+        </div>
+      </div>
+
+      <div class="text-mode hidden" id="textMode">ABSTENTION</div>
+
+      <div class="fuel" id="fuelSection">
+        <div id="fuelBars">
+          <div class="fuel-bar"></div>
+          <div class="fuel-bar"></div>
+          <div class="fuel-bar"></div>
+          <div class="fuel-bar"></div>
+          <div class="fuel-bar"></div>
+          <div class="fuel-bar"></div>
+          <div class="fuel-bar"></div>
+          <div class="fuel-bar"></div>
+        </div>
+        <span style="margin-top: 10px">FUEL</span>
+      </div>
+
+      <div class="gear-container" id="gearSection">
+        <div id="gearNumber" class="gear">0</div>
+        <span id="gearLabel" class="label">GEAR</span>
+      </div>
+    </div>
+
+    <script>
+      // Visibility flags for each block
+      let showSpeed = true; // Speed display
+      let showRpm = false; // RPM bars
+      let showText = false; // Text mode
+      let showFuel = false; // Fuel display
+      let showGear = true; // Gear display
+
+      // Separate flags for MPH and GEAR
+      let showMph = false; // true = show MPH, false = show GEAR
+      let showMphLabel = false; // true = MPH gets "label" class
+      let showGearLabel = false; // true = GEAR gets "label" class
+
+      // Function to update display based on flags
+      function updateDisplay() {
+        const speedContainer = document.getElementById("speed");
+        const rpmBlock = document.getElementById("rpmBlock");
+        const textMode = document.getElementById("textMode");
+        const fuelSection = document.getElementById("fuelSection");
+        const gearSection = document.getElementById("gearSection");
+        const mphLabel = document.getElementById("mphLabel");
+        const gearLabel = document.getElementById("gearLabel");
+
+        // Update speed visibility
+        if (showSpeed) {
+          speedContainer.parentElement.classList.remove("hidden");
+        } else {
+          speedContainer.parentElement.classList.add("hidden");
+        }
+
+        // Update RPM visibility
+        if (showRpm) {
+          rpmBlock.classList.remove("hidden");
+        } else {
+          rpmBlock.classList.add("hidden");
+        }
+
+        // Update text mode visibility
+        if (showText) {
+          textMode.classList.remove("hidden");
+        } else {
+          textMode.classList.add("hidden");
+        }
+
+        // Update fuel visibility
+        if (showFuel) {
+          fuelSection.classList.remove("hidden");
+        } else {
+          fuelSection.classList.add("hidden");
+        }
+
+        // Update gear visibility
+        if (showGear) {
+          gearSection.classList.remove("hidden");
+        } else {
+          gearSection.classList.add("hidden");
+        }
+
+        // Update MPH vs GEAR display
+        if (showMphLabel) {
+          mphLabel.className = "label";
+        } else {
+          mphLabel.className = "";
+        }
+
+        if (showGearLabel) {
+          gearLabel.className = "label";
+        } else {
+          gearLabel.className = "";
+        }
+      }
+
+      // Function to toggle between MPH and GEAR
+      function toggleMphGear() {
+        showMph = !showMph;
+        updateDisplay();
+        console.log("Switched to:", showMph ? "MPH" : "GEAR");
+      }
+
+      // Function to toggle MPH label
+      function toggleMphLabel() {
+        showMphLabel = !showMphLabel;
+        updateDisplay();
+        console.log("MPH label:", showMphLabel ? "ON" : "OFF");
+      }
+
+      // Function to toggle GEAR label
+      function toggleGearLabel() {
+        showGearLabel = !showGearLabel;
+        updateDisplay();
+        console.log("GEAR label:", showGearLabel ? "ON" : "OFF");
+      }
+
+      // Initialize display when page loads
+      document.addEventListener("DOMContentLoaded", function () {
+        updateDisplay();
+
+        // Add click event listeners to labels
+        const mphLabel = document.getElementById("mphLabel");
+        const gearLabel = document.getElementById("gearLabel");
+
+        mphLabel.addEventListener("click", toggleMphLabel);
+        gearLabel.addEventListener("click", toggleGearLabel);
+
+        // Log current flag values to console
+        console.log("Visibility Flags:");
+        console.log("showSpeed:", showSpeed);
+        console.log("showRpm:", showRpm);
+        console.log("showText:", showText);
+        console.log("showFuel:", showFuel);
+        console.log("showGear:", showGear);
+        console.log("showMph:", showMph);
+        console.log("showMphLabel:", showMphLabel);
+        console.log("showGearLabel:", showGearLabel);
+        console.log("");
+        console.log(
+          "To change visibility, modify the flag variables above and call updateDisplay()"
+        );
+        console.log(
+          "To toggle MPH label, call toggleMphLabel() or click on MPH"
+        );
+        console.log(
+          "To toggle GEAR label, call toggleGearLabel() or click on GEAR"
+        );
+        console.log("Both labels can be active at the same time!");
+      });
+    </script>
+  </body>
+</html>
