@@ -1,0 +1,50 @@
+[
+  {
+    "key": "cmd+shift+g",
+    "command": "workbench.action.terminal.sendSequence",
+    "args": {
+      "text": "./commit.sh\n"
+    },
+    "when": "terminalFocus"
+  },
+  {
+    "key": "cmd+shift+alt+g",
+    "command": "workbench.action.terminal.sendSequence",
+    "args": {
+      "text": "./git-ai-commit.sh --dry-run\n"
+    },
+    "when": "terminalFocus"
+  },
+  {
+    "key": "cmd+shift+1",
+    "command": "workbench.action.terminal.sendSequence",
+    "args": {
+      "text": "./git-ai-commit.sh feat\n"
+    },
+    "when": "terminalFocus"
+  },
+  {
+    "key": "cmd+shift+2",
+    "command": "workbench.action.terminal.sendSequence",
+    "args": {
+      "text": "./git-ai-commit.sh fix\n"
+    },
+    "when": "terminalFocus"
+  },
+  {
+    "key": "cmd+shift+3",
+    "command": "workbench.action.terminal.sendSequence",
+    "args": {
+      "text": "./git-ai-commit.sh docs\n"
+    },
+    "when": "terminalFocus"
+  },
+  {
+    "key": "cmd+shift+4",
+    "command": "workbench.action.terminal.sendSequence",
+    "args": {
+      "text": "./git-ai-commit.sh --status\n"
+    },
+    "when": "terminalFocus"
+  }
+]
