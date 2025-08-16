@@ -5,9 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CyberBike UI</title>
     <style>
+      :root {
+        /* Color constants - change these to update all colors at once */
+        --primary-blue: #00b7ff;
+        --primary-cyan: #3bffd7;
+        --primary-red: #ff3b3b;
+        --hover-cyan: #00ffcc;
+        --hover-blue: #00ccff;
+        --background-black: black;
+        --text-white: white;
+      }
+
       body {
-        background-color: black;
-        color: #00b7ff;
+        background-color: var(--background-black);
+        color: var(--primary-blue);
         font-family: "Orbitron", sans-serif;
         display: flex;
         justify-content: center;
@@ -45,17 +56,17 @@
       /* Styling for inactive labels */
       span[id$="Label"]:not(.label) {
         font-size: 24px;
-        color: #00b7ff;
+        color: var(--primary-blue);
         margin-top: 5px;
         cursor: pointer;
         transition: all 0.2s ease;
       }
       span[id$="Label"]:not(.label):hover {
-        color: #00ccff;
+        color: var(--hover-blue);
         transform: scale(1.05);
       }
       .label-red {
-        background: #ff3b3b;
+        background: var(--primary-red);
       }
       .rpm-bars {
         display: flex;
@@ -64,7 +75,7 @@
       .bar {
         width: 10px;
         height: 60px;
-        background: #ff3b3b;
+        background: var(--primary-red);
         animation: pulse 1s infinite ease-in-out;
       }
       @keyframes pulse {
@@ -85,7 +96,7 @@
         width: 20px;
         height: 40px;
         margin: 0 2px;
-        background-color: #ff3b3b;
+        background-color: var(--primary-red);
       }
 
       .rpm {
@@ -95,7 +106,7 @@
       .text-mode {
         font-size: 60px;
         font-weight: bold;
-        color: #ff3b3b;
+        color: var(--primary-red);
         text-align: center;
         animation: fadeBlink 3s infinite ease-in-out;
       }
@@ -128,7 +139,7 @@
       .gear {
         font-size: 100px;
         font-weight: bold;
-        color: #ff3b3b;
+        color: var(--primary-red);
         text-align: center;
       }
 

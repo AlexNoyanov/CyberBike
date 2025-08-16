@@ -5,9 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Futuristic UI</title>
     <style>
+      :root {
+        /* Color constants - change these to update all colors at once */
+        --primary-blue: #00b7ff;
+        --primary-cyan: #3bffd7;
+        --primary-red: #ff3b3b;
+        --hover-cyan: #00ffcc;
+        --hover-blue: #00ccff;
+        --background-black: black;
+        --text-white: white;
+      }
+
       body {
-        background-color: black;
-        color: #00b7ff;
+        background-color: var(--background-black);
+        color: var(--primary-blue);
         font-family: "Orbitron", sans-serif;
         display: flex;
         justify-content: center;
@@ -26,14 +37,14 @@
       }
       .label {
         font-size: 24px;
-        background: #3bffd7;
-        color: black;
+        background: var(--primary-cyan);
+        color: var(--background-black);
         padding: 4px 8px;
         border-radius: 4px;
         margin-top: 5px;
       }
       .label-red {
-        background: #ff3b3b;
+        background: var(--primary-red);
       }
       .rpm-bars {
         display: flex;
@@ -42,7 +53,7 @@
       .bar {
         width: 10px;
         height: 60px;
-        background: #ff3b3b;
+        background: var(--primary-blue);
         animation: pulse 1s infinite ease-in-out;
       }
       @keyframes pulse {
@@ -63,17 +74,18 @@
         width: 20px;
         height: 40px;
         margin: 0 2px;
-        background-color: #ff3b3b;
+        background-color: var(--primary-red);
       }
 
       .rpm {
         rotate: 180deg;
+        margin-top: 50%;
       }
 
       .text-mode {
         font-size: 60px;
         font-weight: bold;
-        color: #ff3b3b;
+        color: var(--primary-red);
         text-align: center;
         animation: fadeBlink 3s infinite ease-in-out;
       }
@@ -106,7 +118,7 @@
       .gear {
         font-size: 100px;
         font-weight: bold;
-        color: #ff3b3b;
+        color: var(--primary-red);
         text-align: center;
       }
 
@@ -151,6 +163,17 @@
     </div>
 
     <script>
+      // Color constants that match CSS variables
+      const COLORS = {
+        primaryBlue: "#00b7ff",
+        primaryCyan: "#3bffd7",
+        primaryRed: "#ff3b3b",
+        hoverCyan: "#00ffcc",
+        hoverBlue: "#00ccff",
+        backgroundBlack: "black",
+        textWhite: "white",
+      };
+
       // Add mode control variables
       let textModeActive = false;
       let rpmBarActive = true; // Start with RPM bars active
@@ -281,13 +304,13 @@
 
         // Apply special color for "N" gear
         if (gearValue === "N") {
-          changeGearColor("#3bffd7");
+          changeGearColor(COLORS.primaryCyan);
         } else {
           // Randomly change gear color to red or default blue for numeric gears
           if (Math.random() > 0.5) {
-            changeGearColor("#ff3b3b"); // Red
+            changeGearColor(COLORS.primaryRed); // Red
           } else {
-            changeGearColor("#00b7ff"); // Default blue
+            changeGearColor(COLORS.primaryBlue); // Default blue
           }
         }
       }
@@ -296,7 +319,7 @@
       function initializeGear() {
         const gearValue = gearValues[currentGear]; // This will be "N" since currentGear = 0
         document.getElementById("gearNumber").innerText = gearValue;
-        changeGearColor("#3bffd7"); // Green color for neutral
+        changeGearColor(COLORS.primaryCyan); // Green color for neutral
       }
 
       function changeGearColor(color) {
