@@ -270,14 +270,42 @@
       // Example: Set boost mode (faster increment)
       // setSpeedIncrement(5); // Increases by 5 every update
 
+      // RPM animation variables
+      let rpmCycle = 0; // Current position in the cycle (0 to 2π)
+      let rpmCycleSpeed = 0.05; // Speed of the cycle (smaller = slower)
+
+      // Function to control RPM animation speed
+      function setRpmCycleSpeed(speed) {
+        rpmCycleSpeed = speed;
+        // Smaller values = slower animation
+        // 0.01 = very slow, 0.05 = medium, 0.1 = fast
+      }
+
       function generateRPM() {
         const rpmBars = document.getElementById("rpmBars");
         rpmBars.innerHTML = "";
+
+        // Create 50 bars with cyclical heights
         for (let i = 0; i < 50; i++) {
           const bar = document.createElement("div");
           bar.className = "bar";
-          bar.style.height = 30 + Math.random() * 50 + "px";
+
+          // Calculate position in the cycle for this bar
+          const barPosition = (rpmCycle + i * 0.1) % (2 * Math.PI);
+
+          // Use sine wave to create smooth up and down motion
+          // Sine wave goes from -1 to 1, so we map it to height range 20px to 80px
+          const heightMultiplier = (Math.sin(barPosition) + 1) / 2; // Maps to 0-1
+          const barHeight = 20 + heightMultiplier * 60; // Maps to 20-80px
+
+          bar.style.height = barHeight + "px";
           rpmBars.appendChild(bar);
+        }
+
+        // Advance the cycle for next frame
+        rpmCycle += rpmCycleSpeed;
+        if (rpmCycle >= 2 * Math.PI) {
+          rpmCycle = 0; // Reset cycle to prevent overflow
         }
       }
 
@@ -368,6 +396,16 @@
 
       // Initialize with default message
       setTextMessage("ABSTENTION");
+
+      // Log RPM animation settings
+      console.log("RPM Animation Controls:");
+      console.log("Current cycle speed:", rpmCycleSpeed);
+      console.log("Use setRpmCycleSpeed(speed) to control animation:");
+      console.log("  setRpmCycleSpeed(0.01) - Very slow");
+      console.log("  setRpmCycleSpeed(0.02) - Slow (default)");
+      console.log("  setRpmCycleSpeed(0.05) - Medium");
+      console.log("  setRpmCycleSpeed(0.1) - Fast");
+      console.log("  setRpmCycleSpeed(0.2) - Very fast");
 
       // Add keyboard shortcuts for mode control
       document.addEventListener("keydown", function (event) {
